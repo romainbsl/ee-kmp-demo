@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     id("com.android.library")
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.4.10"
+    kotlin("plugin.serialization")
 }
 
 group = "org.kodein"
@@ -15,6 +15,7 @@ kotlin {
             kotlinOptions.jvmTarget = "1.8"
         }
     }
+
     ios {
         binaries {
             framework {
@@ -22,25 +23,27 @@ kotlin {
             }
         }
     }
+
     sourceSets {
-        val coroutinesVersion = "1.3.9-mt-2"
-        val serializationVersion = "1.0.0"
-        val datetimeVersion = "0.1.0"
-        val ktorVersion = "1.4.1"
-        val kodeinDBVersion = "0.4.1-beta-kotlin-1.4.20-91"
+        val coroutinesVersion = "1.4.3-native-mt"
+        val serializationVersion = "1.1.0"
+        val datetimeVersion = "0.1.1"
+        val ktorVersion = "1.5.3"
+        val kodeinDBVersion = "0.6.1-beta"
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
+
                 api("org.kodein.db:kodein-db:$kodeinDBVersion")
                 api("org.kodein.db:kodein-db-inmemory:$kodeinDBVersion")
                 api("org.kodein.db:kodein-db-serializer-kotlinx:$kodeinDBVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                api("io.ktor:ktor-client-core:$ktorVersion")
-                api("io.ktor:ktor-client-json:$ktorVersion")
-                api("io.ktor:ktor-client-serialization:$ktorVersion")
 
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
             }
         }
         val commonTest by getting {
@@ -53,16 +56,16 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
                 api("androidx.core:core-ktx:1.3.2")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
             }
         }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13")
+                implementation("junit:junit:4.13.2")
                 implementation("androidx.test.ext:junit:1.1.2")
                 implementation("androidx.test.espresso:espresso-core:3.3.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3")
             }
         }
         val iosMain by getting {
@@ -71,6 +74,10 @@ kotlin {
             }
         }
         val iosTest by getting
+
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
     }
 }
 

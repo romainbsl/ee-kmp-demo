@@ -17,23 +17,25 @@
 package org.kodein.demo
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.kodein.shared.User
 import org.kodein.shared.UserEntity
 
 @ExperimentalCoroutinesApi
@@ -60,7 +62,7 @@ fun MyApp(content: @Composable () -> Unit) {
 @Composable
 @ExperimentalCoroutinesApi
 fun MyScreenContent() {
-    val app = ContextAmbient.current.applicationContext as DemoApplication
+    val app = LocalContext.current.applicationContext as DemoApplication
     val userListState = app.userRepository.userListState().collectAsState()
 
     Column(modifier = Modifier.fillMaxHeight()) {
@@ -68,9 +70,11 @@ fun MyScreenContent() {
 
             Text(text = "User List (${userListState.value.count()})", modifier = Modifier.padding(6.dp))
 
-            LazyColumnFor(items = userListState.value) { user ->
-                UserRow(user = user)
-                Divider()
+            LazyColumn {
+                items(userListState.value) {
+                    UserRow(user = it)
+                    Divider()
+                }
             }
         }
     }
