@@ -10,12 +10,10 @@ class UserApi(
     private val userRepository: UserRepository,
     scope: CoroutineScope
 ) : CoroutineScope by scope {
-    fun fetchUsers(size: Int = 100) {
-        launch {
-            val response = httpClient.get<UserApiResult>("https://randomuser.me/api/?results=$size")
-            response.results.forEach {
-                userRepository.saveUser(it.asEntity())
-            }
+    fun fetchUsers(size: Int = 100) = launch {
+        val response = httpClient.get<UserApiResult>("https://randomuser.me/api/?results=$size")
+        response.results.forEach {
+            userRepository.saveUser(it.asDomain())
         }
     }
 }

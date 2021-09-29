@@ -36,9 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 class UserList : ObservableObject {
-    @Published var userList: [UserEntity]
+    @Published var userList: [UserDomain]
 
     init() {
-        userList = [UserEntity]()
+        userList = [UserDomain]()
     }
 }

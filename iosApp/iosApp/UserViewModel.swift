@@ -7,7 +7,7 @@ import Foundation
 import shared
 
 class UserViewModel: ObservableObject {
-    @Published var userList = [UserEntity]()
+    @Published var userList = [UserDomain]()
 
     private let userRepository: UserRepository
     init(userRepository: UserRepository) {
@@ -15,7 +15,7 @@ class UserViewModel: ObservableObject {
     }
 
     func fetchUsers() {
-        userRepository.getAllUsers(completionHandler: { (users: [UserEntity]?, error: Error?) in
+        userRepository.getAllUsers(completionHandler: { (users: [UserDomain]?, error: Error?) in
             if let userList = users {
                 self.userList = userList
             }
